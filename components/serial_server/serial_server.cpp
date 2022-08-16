@@ -81,7 +81,7 @@ void SerialServer::serial_read() {
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
         this->stream_->read_array(reinterpret_cast<uint8_t*>(buf), len);
 #else
-        len = this->stream_->readBytes(buf, len);
+        this->stream_->readBytes(buf, len);
 #endif
         for (auto const& client : this->clients_)
             client->tcp_client->write(buf, len);
