@@ -54,7 +54,7 @@ namespace serial_server {
 
 class SerialServer : public uart::UARTDevice, public Component {
 public:
-    explicit StreamServerComponent(SSStream *stream) : stream_{stream} {}
+    explicit SerialServer(SSStream *stream) : stream_{stream} {}
     void setup() override;
     void loop() override;
     void dump_config() override;
