@@ -20,10 +20,16 @@
 
 #pragma once
 
+#include "esphome/core/version.h"
 #include "esphome/core/component.h"
 #include "esphome/components/uart/uart.h"
 #include "esphome/components/binary_sensor/binary_sensor.h"
 
+// Provide VERSION_CODE for ESPHome versions lacking it, as existence checking doesn't work for function-like macros
+#ifndef VERSION_CODE
+#define VERSION_CODE(major, minor, patch) ((major) << 16 | (minor) << 8 | (patch))
+#endif
+    
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,6 +38,8 @@
 #ifdef ARDUINO_ARCH_ESP8266
 #include <ESPAsyncTCP.h>
 #else
+// AsyncTCP.h includes parts of freertos, which require FreeRTOS.h header to be included first
+#include <freertos/FreeRTOS.h>
 #include <AsyncTCP.h>
 #endif
 
