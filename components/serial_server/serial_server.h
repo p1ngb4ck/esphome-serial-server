@@ -62,6 +62,7 @@ public:
 
     float get_setup_priority() const override { return esphome::setup_priority::AFTER_WIFI; }
 
+    void set_uart_parent(esphome::uart::UARTComponent *parent) { this->stream_ = parent; }
     void set_port(uint16_t port) { this->port_ = port; }
     void set_multi_client(bool allow_multi_client) { this->allow_multi_client_ = allow_multi_client; }
     void register_connection_sensor(binary_sensor::BinarySensor *connection_sensor) {this->connection_sensor_ = connection_sensor; }
