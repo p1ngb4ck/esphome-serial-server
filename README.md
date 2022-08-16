@@ -3,6 +3,10 @@ ESPHome component that provides a TCP-to-UART service, to directly access serial
 
 ```yaml
 
+# fork of https://github.com/thegroove/esphome-serial-server
+external_components:
+  - source: github://jbornema/esphome-serial-server
+  
 logger:
   baud_rate: 0 # disable serial logging if you're using the standard TX/RX pins for your serial peripheral
 
