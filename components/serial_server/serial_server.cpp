@@ -23,6 +23,9 @@
 #include "esphome/core/log.h"
 #include "esphome/core/util.h"
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
+#include "esphome/components/network/util.h"
+#endif
 static const char *TAG = "serial_server";
 
 namespace esphome {
@@ -74,23 +77,39 @@ void SerialServer::serial_read() {
     int len;
     while ((len = this->available()) > 0) {
         char buf[128];
-        size_t read = this->readBytes(buf, min(len, 128));
+        len = std::min(len, 128);
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
+        this->stream_->read_array(reinterpret_cast<uint8_t*>(buf), len);
+#else
+        len = this->stream_->readBytes(buf, len);
+#endif
         for (auto const& client : this->clients_)
-            client->tcp_client->write(buf, read);
+            client->tcp_client->write(buf, len);
     }
 }
 
 void SerialServer::serial_write() {
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
+    this->stream_->write_array(this->recv_buf_);
+    this->recv_buf_.clear();
+#else
     size_t len;
     while ((len = this->recv_buf_.size()) > 0) {
-        this->write_array(this->recv_buf_.data(), len);
+        this->stream_->write(this->recv_buf_.data(), len);
         this->recv_buf_.erase(this->recv_buf_.begin(), this->recv_buf_.begin() + len);
     }
+#endif    
 }
 
 void SerialServer::dump_config() {
     ESP_LOGCONFIG(TAG, "Serial Server:");
-    ESP_LOGCONFIG(TAG, "  Address: %s:%u", network_get_address().c_str(), this->port_);
+    ESP_LOGCONFIG(TAG, "  Address: %s:%u",
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
+        esphome::network::get_ip_address().str().c_str(),
+#else
+        network_get_address().c_str(),
+#endif
+        this->port_);
 }
 
 void SerialServer::on_shutdown() {
