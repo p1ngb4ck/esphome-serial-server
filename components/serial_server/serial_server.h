@@ -43,11 +43,18 @@
 #include <AsyncTCP.h>
 #endif
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
+using SSStream = esphome::uart::UARTComponent;
+#else
+using SSStream = Stream;
+#endif
+
 namespace esphome {
 namespace serial_server {
 
 class SerialServer : public uart::UARTDevice, public Component {
 public:
+    explicit StreamServerComponent(SSStream *stream) : stream_{stream} {}
     void setup() override;
     void loop() override;
     void dump_config() override;
@@ -74,6 +81,7 @@ protected:
         bool disconnected{false};
     };
 
+    SSStream *stream_{nullptr};
     AsyncServer server_{0};
     uint16_t port_;
     bool allow_multi_client_;
