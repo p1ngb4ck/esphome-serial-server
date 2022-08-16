@@ -12,7 +12,7 @@ class_ = ns.class_('BinarySensor', binary_sensor.BinarySensor, cg.EntityBase)
 CONFIG_SCHEMA = binary_sensor.BINARY_SENSOR_SCHEMA.extend({
     cv.GenerateID(): cv.declare_id(class_),
     cv.GenerateID(CONF_SERIAL_SERVER_ID): cv.use_id(SerialServer),
-    cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_CONNECTIVITY): binary_sensor.device_class,
+    cv.Optional(CONF_DEVICE_CLASS): binary_sensor.binary_sensor_schema(device_class=DEVICE_CLASS_CONNECTIVITY),
 }).extend(cv.COMPONENT_SCHEMA)
 
 def to_code(config):
