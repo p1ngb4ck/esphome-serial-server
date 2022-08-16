@@ -3,8 +3,8 @@ import esphome.config_validation as cv
 from esphome.components import uart
 from esphome.const import CONF_ID, CONF_PORT, CONF_BAUD_RATE
 
-DEPENDENCIES = ['uart']
-AUTO_LOAD = ['binary_sensor']
+DEPENDENCIES = ["uart", "network"]
+AUTO_LOAD = ["binary_sensor", "async_tcp"]
 
 CONF_MULTI_CLIENT = "multi_client"
 CONF_MDNS_SERVICE_NAME = "mdns_service_name"
