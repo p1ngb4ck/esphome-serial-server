@@ -104,7 +104,7 @@ void SerialServer::serial_write() {
 void SerialServer::dump_config() {
     ESP_LOGCONFIG(TAG, "Serial Server:");
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             ESP_LOGCONFIG(TAG, "  Address: %s:%u", esphome::network::get_ip_addresses()[i], this->port_);
         }
 #else
