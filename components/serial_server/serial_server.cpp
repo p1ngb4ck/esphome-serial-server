@@ -103,13 +103,13 @@ void SerialServer::serial_write() {
 
 void SerialServer::dump_config() {
     ESP_LOGCONFIG(TAG, "Serial Server:");
-    ESP_LOGCONFIG(TAG, "  Address: %s:%u",
 #if ESPHOME_VERSION_CODE >= VERSION_CODE(2021, 10, 0)
-        esphome::network::get_ip_addresses().str().c_str(),
+        for (auto &esphome::network::get_ip_addresses() : ip_address) {
+            ESP_LOGCONFIG(TAG, "  Address: %s:%u", ip_address.str().c_str(), this->port_);
+        }
 #else
-        network_get_address().c_str(),
+        ESP_LOGCONFIG(TAG, "  Address: %s:%u", network_get_address().c_str(), this->port_);
 #endif
-        this->port_);
 }
 
 void SerialServer::on_shutdown() {
